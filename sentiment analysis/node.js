@@ -1,10 +1,10 @@
-const natural = require('natural');
+import { WordTokenizer, BayesClassifier } from 'natural';
 
 // Create a tokenizer to break the sentence into words
-const tokenizer = new natural.WordTokenizer();
+const tokenizer = new WordTokenizer();
 
 // Create a classifier and train it on a dataset of sarcastic and non-sarcastic sentences
-const classifier = new natural.BayesClassifier();
+const classifier = new BayesClassifier();
 classifier.addDocument('I just love waiting in line for hours', 'sarcastic');
 classifier.addDocument('Wow, I never thought standing in the rain would be so much fun', 'sarcastic');
 classifier.addDocument('This is the best day of my life...', 'non-sarcastic');

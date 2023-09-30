@@ -11,7 +11,7 @@ function analyze() {
     const exclamationRegex = /!/g;
     const exclamationMatches = value.match(exclamationRegex);
     // console.log(exclamationMatches)
-    const numExclamations = exclamationMatches.length;
+    const numExclamations = exclamationMatches ? exclamationMatches.length : 0;
     s4.innerHTML = numExclamations;
     // console.log(s4.innerHTML)
     const options = {
@@ -29,15 +29,15 @@ function analyze() {
         // .then(response => console.log(response.sentiment_list[0]))
 
         .then(response => {
-            if (response.sentiment_list && response.sentiment_list.length > 0) {
-                s1.innerHTML = response.sentiment_list[1].pos;
-                s2.innerHTML = response.sentiment_list[1].neu;
-                s3.innerHTML = response.sentiment_list[1].neg;
+            if (response.sentiment_list && response.sentiment_list.length > 1) {
+                s1.innerHTML = response.sentiment_list[1].pos || 'N/A';
+                s2.innerHTML = response.sentiment_list[1].neu || 'N/A';
+                s3.innerHTML = response.sentiment_list[1].neg || 'N/A';
             } else {
-                console.error('Sentiment list is empty or undefined');
+                console.error('Sentiment list is empty or does not have the expected structure');
+                // You can provide fallback values or display an error message to the user here.
             }
         })
-
         .catch(err => console.error(err));
 
 }
