@@ -101,7 +101,7 @@
                                 </div>
                             </div>
 
-                            <div class="d-flex justify-content-between">
+                            <!-- <div class="d-flex justify-content-between">
                                 <p class="small mb-1 text-muted">23 Jan 2:05 pm</p>
                                 <p class="small mb-1">Johny Bullock</p>
                             </div>
@@ -114,9 +114,9 @@
                                 </div>
                                 <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
                                     alt="avatar 1" style="width: 45px; height: 100%;">
-                            </div>
+                            </div> -->
 
-                            <div class="d-flex justify-content-between">
+                            <!-- <div class="d-flex justify-content-between">
                                 <p class="small mb-1">Timona Siera</p>
                                 <p class="small mb-1 text-muted">23 Jan 5:37 pm</p>
                             </div>
@@ -130,9 +130,9 @@
                                         sit amet
                                         consectetur adipisicing elit similique quae consequatur</p>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div class="d-flex justify-content-between">
+                            <!-- <div class="d-flex justify-content-between">
                                 <p class="small mb-1 text-muted">23 Jan 6:10 pm</p>
                                 <p class="small mb-1">Johny Bullock</p>
                             </div>
@@ -146,7 +146,7 @@
                                 </div>
                                 <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
                                     alt="avatar 1" style="width: 45px; height: 100%;">
-                            </div>
+                            </div> -->
 
                         </div>
                         <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
@@ -169,6 +169,80 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
+    <script>
+        async function postData(url = "", data = {}) {
+            try {
+                const response = await fetch(url, {
+                    method: "POST",
+                    mode: "cors",
+                    cache: "no-cache",
+                    credentials: "same-origin",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-RapidAPI-Key": 'bfc752120cmsh8332e41c4ea7dbdp1bd2c0jsnd1d0f4ed82bc', // Replace with your API key
+                        "X-RapidAPI-Host": 'open-ai21.p.rapidapi.com',
+                    },
+                    redirect: "follow",
+                    referrerPolicy: "no-referrer",
+                    body: JSON.stringify(data),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const responseData = await response.json();
+                return responseData;
+            } catch (error) {
+                console.error("Error:", error);
+                throw error; // Rethrow the error for handling in your application
+            }
+        }
+
+        // Replace 'YOUR_API_KEY' with your actual API key
+
+        if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+            // Create a new SpeechRecognition object
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+
+            // Configure the recognition settings
+            recognition.continuous = true; // Continuously listen for speech
+            recognition.interimResults = true; // Get interim results as the user speaks
+
+            // Define event handlers for the recognition object
+
+            // Called when the recognition service starts listening
+            recognition.onstart = () => {
+                console.log('Listening...');
+            };
+
+            // Called when the recognition service captures a result
+            recognition.onresult = (event) => {
+                let result = event.results[event.results.length - 1][0].transcript;
+
+                postData("/api", { input: result }).then((data) => {
+                    console.log(data.messages);
+                }).catch((error) => {
+                    console.error("Request failed:", error);
+                });
+
+            };
+
+            // Called when an error occurs
+            recognition.onerror = (event) => {
+                console.error('Recognition error:', event.error);
+            };
+
+            // Start the recognition service
+            recognition.start();
+
+            // Stop the recognition service when needed
+            // recognition.stop();
+        } else {
+            console.log('Speech recognition not supported in this browser.');
+        }
+
+    </script>
 </body>
 </body>
 

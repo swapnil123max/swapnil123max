@@ -1,0 +1,61 @@
+async function fetchApiResponse(input) {
+    try {
+        messages.push({
+            role: 'user',
+            content: input
+        });
+
+        console.log(messages);
+
+    const url = 'https://chatgpt-gpt4-ai-chatbot.p.rapidapi.com/ask';
+
+        const headers = {
+            'Content-Type': 'application/json',
+        'X-RapidAPI-Key': 'bfc752120cmsh8332e41c4ea7dbdp1bd2c0jsnd1d0f4ed82bc',
+		'X-RapidAPI-Host': 'chatgpt-gpt4-ai-chatbot.p.rapidapi.com'
+        };
+
+        const requestBody = {
+            messages: messages, // Include user messages
+            web_access: true,
+            stream: false
+        };
+
+        const requestOptions = {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(requestBody)
+        };
+
+        const response = await fetch(url, requestOptions);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        return responseData;
+    } catch (error) {
+        return error;
+    }
+}
+
+
+const url = 'https://chatgpt-gpt4-ai-chatbot.p.rapidapi.com/ask';
+const options = {
+	method: 'POST',
+	headers: {
+		'content-type': 'application/json',
+		'X-RapidAPI-Key': 'bfc752120cmsh8332e41c4ea7dbdp1bd2c0jsnd1d0f4ed82bc',
+		'X-RapidAPI-Host': 'chatgpt-gpt4-ai-chatbot.p.rapidapi.com'
+	},
+	body: {
+		query: 'How to become rich?'
+	}
+};
+
+try {
+	const response = await fetch(url, options);
+	const result = await response.text();
+	console.log(result);
+} catch (error) {
+	console.error(error);
+}
